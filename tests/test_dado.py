@@ -7,4 +7,8 @@ class TestDado:
         dado = Dado()
         valor = dado.lanzar()
         assert 1<=valor<=6
-    
+
+    def test_denominar_pinta(self):
+        valor = 1
+        pinta = Dado().denominar_pinta(valor)
+        assert pinta == "As"
