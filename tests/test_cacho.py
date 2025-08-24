@@ -6,3 +6,10 @@ class TestCacho:
     def test_crear_cacho(self):
         cacho = Cacho()
         assert len(cacho.get_dados()) == 5
+
+    def test_agitar_cacho(self, mocker):
+        mocker.patch("tarea_dudo_TDD.src.servicios.generador_aleatorio.random.randint", return_value=5)
+        cacho = Cacho()
+        cacho.agitar()
+        for dado in cacho.get_dados():
+            assert dado.get_pinta() == "Quina"
