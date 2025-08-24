@@ -13,3 +13,8 @@ class TestCacho:
         cacho.agitar()
         for dado in cacho.get_dados():
             assert dado.get_pinta() == "Quina"
+
+    def test_añadir_dado(self):
+        cacho = Cacho()
+        cacho.añadir_dado()
+        assert len(cacho.get_dados()) == 6
