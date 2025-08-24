@@ -11,18 +11,8 @@ class Dado:
         return self.valor
 
     def denominar_pinta(self, valor):
-        if valor==1:
-            return "As"
-        elif valor==2:
-            return "Tonto"
-        elif valor==3:
-            return "Tren"
-        elif valor==4:
-            return "Cuadra"
-        elif valor==5:
-            return "Quina"
-        elif valor==6:
-            return "Sexto"
+        pintas = {1: "As", 2: "Tonto", 3: "Tren", 4: "Cuadra", 5: "Quina", 6: "Sexto"}
+        return pintas[valor]
 
     def get_pinta(self):
         return self.pinta
