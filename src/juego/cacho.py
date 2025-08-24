@@ -4,5 +4,9 @@ class Cacho:
     def __init__(self):
         self.dados = [Dado() for i in range(5)]
 
+    def agitar(self):
+        for dado in self.dados:
+            dado.lanzar()
+
     def get_dados(self):
         return self.dados
