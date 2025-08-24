@@ -8,5 +8,8 @@ class Cacho:
         for dado in self.dados:
             dado.lanzar()
 
+    def añadir_dado(self):
+        self.dados.append(Dado())
+
     def get_dados(self):
         return self.dados
