@@ -34,3 +34,11 @@ class TestCacho:
 
         cacho.quitar_dado()
         assert len(cacho.get_dados()) == 0
+
+    def test_mostrar_cacho(self, mocker, capsys):
+        mocker.patch("tarea_dudo_TDD.src.servicios.generador_aleatorio.random.randint", return_value=5)
+        cacho = Cacho()
+        cacho.agitar()
+        cacho.mostrar()
+        captured = capsys.readouterr()
+        assert captured.out == "Quina - Quina - Quina - Quina - Quina\n"
