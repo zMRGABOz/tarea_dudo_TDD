@@ -23,3 +23,14 @@ class TestCacho:
         cacho = Cacho()
         cacho.quitar_dado()
         assert len(cacho.get_dados()) == 4
+
+    def test_quitar_dado_cacho_vacio(self):
+        cacho = Cacho()
+
+        for i in range(5):
+            cacho.quitar_dado()
+
+        assert len(cacho.get_dados()) == 0
+
+        cacho.quitar_dado()
+        assert len(cacho.get_dados()) == 0
