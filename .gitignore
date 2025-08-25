@@ -1,1 +1,5 @@
 venv/
+.pytest_cache
+src/juego/__pycache__
+src/servicios/__pycache__
+tests/__pycache__
