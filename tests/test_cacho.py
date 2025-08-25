@@ -18,3 +18,8 @@ class TestCacho:
         cacho = Cacho()
         cacho.añadir_dado()
         assert len(cacho.get_dados()) == 6
+
+    def test_quitar_dado(self):
+        cacho = Cacho()
+        cacho.quitar_dado()
+        assert len(cacho.get_dados()) == 4
