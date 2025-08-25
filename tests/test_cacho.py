@@ -41,4 +41,4 @@ class TestCacho:
         cacho.agitar()
         cacho.mostrar()
         captured = capsys.readouterr()
-        assert captured.out == "Quina - Quina - Quina - Quina - Quina\n"
+        assert captured.out == "Quina - Quina - Quina - Quina - Quina"

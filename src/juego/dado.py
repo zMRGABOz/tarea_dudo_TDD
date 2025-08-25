@@ -16,3 +16,6 @@ class Dado:
 
     def get_pinta(self):
         return self.pinta
+
+    def __str__(self):
+        return self.get_pinta() if self.pinta else "No lanzado"
