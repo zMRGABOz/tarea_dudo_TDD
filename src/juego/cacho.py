@@ -16,10 +16,7 @@ class Cacho:
             self.dados.pop()
 
     def mostrar(self):
-        for dado in self.dados:
-            print(str(dado), end= "")
-            if dado != self.dados[-1]:
-                print(" - ", end= "")
+        print(" - ".join([str(dado) for dado in self.dados]))
 
     def get_dados(self):
         return self.dados
