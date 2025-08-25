@@ -12,7 +12,8 @@ class Cacho:
         self.dados.append(Dado())
 
     def quitar_dado(self):
-        self.dados.pop()
+        if self.dados:
+            self.dados.pop()
 
     def get_dados(self):
         return self.dados
