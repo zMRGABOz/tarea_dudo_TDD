@@ -3,6 +3,7 @@ from tarea_dudo_TDD.src.juego.dado import Dado
 class Cacho:
     def __init__(self):
         self.dados = [Dado() for i in range(5)]
+        self.visible = True
 
     def agitar(self):
         for dado in self.dados:
@@ -16,7 +17,14 @@ class Cacho:
             self.dados.pop()
 
     def mostrar(self):
-        print(" - ".join([str(dado) for dado in self.dados]))
+        if self.visible:
+            print(" - ".join([str(dado) for dado in self.dados]))
+
+    def ocultar(self):
+        self.visible = False
+
+    def revelar(self):
+        self.visible = True
 
     def get_dados(self):
         return self.dados
