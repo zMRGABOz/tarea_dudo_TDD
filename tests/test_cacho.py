@@ -42,3 +42,14 @@ class TestCacho:
         cacho.mostrar()
         captured = capsys.readouterr()
         assert captured.out == "Quina - Quina - Quina - Quina - Quina"
+
+    def test_ocultar_cacho(self, mocker, capsys):
+        mocker.patch("tarea_dudo_TDD.src.servicios.generador_aleatorio.random.randint", return_value=5)
+        cacho = Cacho()
+        cacho.agitar()
+        #Ocultamos el cacho
+        cacho.ocultar()
+        cacho.mostrar()
+        captured = capsys.readouterr()
+        #No se deberia imprimir nada
+        assert captured.out == ""
