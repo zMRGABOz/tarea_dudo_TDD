@@ -3,3 +3,4 @@ venv/
 src/juego/__pycache__
 src/servicios/__pycache__
 tests/__pycache__
+.coverage
