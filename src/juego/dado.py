@@ -1,4 +1,4 @@
-from tarea_dudo_TDD.src.servicios.generador_aleatorio import Generador_Aleatorio
+from src.servicios.generador_aleatorio import Generador_Aleatorio
 
 class Dado:
     def __init__(self):
