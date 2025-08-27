@@ -1,4 +1,4 @@
-from tarea_dudo_TDD.src.juego.dado import Dado
+from src.juego.dado import Dado
 
 class Cacho:
     def __init__(self):

@@ -1,6 +1,6 @@
 import pytest
-from tarea_dudo_TDD.src.juego.cacho import Cacho
-from tarea_dudo_TDD.src.servicios import generador_aleatorio
+from src.juego.cacho import Cacho
+from src.servicios import generador_aleatorio
 
 class TestCacho:
     def test_crear_cacho(self):
@@ -8,7 +8,7 @@ class TestCacho:
         assert len(cacho.get_dados()) == 5
 
     def test_agitar_cacho(self, mocker):
-        mocker.patch("tarea_dudo_TDD.src.servicios.generador_aleatorio.random.randint", return_value=5)
+        mocker.patch("src.servicios.generador_aleatorio.random.randint", return_value=5)
         cacho = Cacho()
         cacho.agitar()
         for dado in cacho.get_dados():
@@ -36,15 +36,15 @@ class TestCacho:
         assert len(cacho.get_dados()) == 0
 
     def test_mostrar_cacho(self, mocker, capsys):
-        mocker.patch("tarea_dudo_TDD.src.servicios.generador_aleatorio.random.randint", return_value=5)
+        mocker.patch("src.servicios.generador_aleatorio.random.randint", return_value=5)
         cacho = Cacho()
         cacho.agitar()
         cacho.mostrar()
         captured = capsys.readouterr()
-        assert captured.out == "Quina - Quina - Quina - Quina - Quina"
+        assert captured.out == "Quina - Quina - Quina - Quina - Quina\n"
 
     def test_ocultar_cacho(self, mocker, capsys):
-        mocker.patch("tarea_dudo_TDD.src.servicios.generador_aleatorio.random.randint", return_value=5)
+        mocker.patch("src.servicios.generador_aleatorio.random.randint", return_value=5)
         cacho = Cacho()
         cacho.agitar()
         #Ocultamos el cacho
