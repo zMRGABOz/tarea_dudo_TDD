@@ -1,6 +1,6 @@
 import math 
 class ValidadorApuesta:
-    def validar_apuesta(self, apuesta_actual, apuesta_nueva, cantidad_dados):
+    def validar_apuesta(self, apuesta_actual, apuesta_nueva, cantidad_dados, obligado):
         if apuesta_actual is None:
             apariciones_actual, pinta_actual = None, None
         else:
@@ -16,13 +16,15 @@ class ValidadorApuesta:
         if pinta_nueva < 1 or pinta_nueva > 6 or pinta_nueva != int(pinta_nueva):
             return False
 
-        #Se verifican casos especiales para empezar con as
- 
+        #Se verifican casos especiales para empezar con as 
         if apuesta_actual is None:
             if pinta_nueva == 1 and cantidad_dados != 1:
                 return False
             return True  
-
+        #Caso para ronda obligada
+        if obligado == True:
+            if pinta_nueva > pinta_actual and cantidad_dados != 1 :
+                return False
 
         #Caso para cambiar DE As
         if pinta_actual == 1 and pinta_nueva != 1:
