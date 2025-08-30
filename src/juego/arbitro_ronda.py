@@ -15,6 +15,8 @@ class ArbitroRonda:
             cachos[indice_apuesta].quitar_dado()
             return True
         else:
+            #Quitar dado a quien dudó
+            cachos[indice_dudo].quitar_dado()
             return False
 
     def calzar(self, cachos, apuesta_actual, obligado, indice_calzo):
