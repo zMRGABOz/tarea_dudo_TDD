@@ -35,3 +35,15 @@ class TestArbitroRonda:
             assert arbitro_ronda.dudar(cachos, (5, 2), obligado, 0, 1) == False
             assert arbitro_ronda.dudar(cachos, (3, 2), obligado, 0, 1) == False
             assert arbitro_ronda.dudar(cachos, (1, 2), obligado, 0, 1) == False
+
+        def test_calzar_correcta(self, mocker):
+            mocker.patch("src.servicios.generador_aleatorio.random.randint", return_value=2)
+            cachos = [Cacho() for _ in range(2)]
+            for cacho in cachos:
+                cacho.agitar()
+            # Hay 10 Tontos en total
+            arbitro_ronda = ArbitroRonda()
+            obligado = False
+            # el metodo calzar recibe una lista de cachos, la apuesta actual, si es ronda obligado o no, y el indice del cacho que calzó,
+            # devuelve True si el calce fue correcto.
+            assert arbitro_ronda.calzar(cachos, (10, 2), obligado, 0) == True
