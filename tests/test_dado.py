@@ -5,8 +5,8 @@ from src.servicios.generador_aleatorio import Generador_Aleatorio
 class TestDado:
     def test_obtener_valor_entre_1_y_6(self):
         dado = Dado()
-        valor = dado.lanzar()
-        assert 1<=valor<=6
+        dado.lanzar()
+        assert 1<=dado.get_valor()<=6
 
     def test_denominar_pinta(self):
         valor = 1

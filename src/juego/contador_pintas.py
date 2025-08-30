@@ -3,10 +3,10 @@ class ContadorPintas:
         contador = 0
         if obligado == True:
             for dado in dados:
-                if dado.get_pinta() == pinta:
+                if dado.get_valor() == pinta:
                     contador = contador + 1
         elif obligado == False:
             for dado in dados:
-                if dado.get_pinta() == pinta or dado.get_pinta() == 1:
+                if dado.get_valor() == pinta or dado.get_valor() == 1:
                     contador = contador + 1
         return contador
