@@ -20,3 +20,18 @@ class TestArbitroRonda:
             assert arbitro_ronda.dudar(cachos, (5, 5), obligado, 0, 1) == True
             assert arbitro_ronda.dudar(cachos, (11, 2), obligado, 0, 1) == True
             assert arbitro_ronda.dudar(cachos, (1, 1), obligado, 0, 1) == True
+
+        def test_duda_incorrecta(self, mocker):
+            mocker.patch("src.servicios.generador_aleatorio.random.randint", return_value=2)
+            cachos = [Cacho() for _ in range(2)]
+            for cacho in cachos:
+                cacho.agitar()
+            # Hay 10 Tontos en total
+            arbitro_ronda = ArbitroRonda()
+            obligado = False
+            # el metodo dudar recibe una lista de cachos, la apuesta actual, indice cacho que hace duda, indice cacho del que hizo la apuesta
+            # y si es ronda obligado o no, devuelve False si la duda fue incorrecta.
+            assert arbitro_ronda.dudar(cachos, (10, 2), obligado, 0, 1) == False
+            assert arbitro_ronda.dudar(cachos, (5, 2), obligado, 0, 1) == False
+            assert arbitro_ronda.dudar(cachos, (3, 2), obligado, 0, 1) == False
+            assert arbitro_ronda.dudar(cachos, (1, 2), obligado, 0, 1) == False

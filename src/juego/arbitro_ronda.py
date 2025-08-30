@@ -12,5 +12,3 @@ class ArbitroRonda:
             contador += contador_pintas.contar_pinta(dados, pinta_actual, obligado)
         if apuesta_apariciones > contador:
             return True
-        else:
-            return False
