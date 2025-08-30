@@ -34,7 +34,7 @@ class ArbitroRonda:
         else:
             cachos[indice_calzo].quitar_dado()
             return False
-            
+
     def validar_calzar(self, cachos, indice_calzo):
         cantidad_dados=0
         for cacho in cachos:
@@ -42,6 +42,8 @@ class ArbitroRonda:
             cantidad_dados += len(dados)
 
         if cantidad_dados >= len(cachos)*5/2:
+            return True
+        elif len(cachos[indice_calzo].get_dados()) == 1:
             return True
         else:
             return False
