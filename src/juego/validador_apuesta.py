@@ -1,6 +1,34 @@
 import math 
 class ValidadorApuesta:
+    """
+    Validador de apuestas para el dudo chileno, está encargado de validar si una apuesta es válida.
+
+    Reglas:
+        - Los "Ases", además de ser una pinta, son comodines y se les asigna el valor del número que se está apostando siempre y cuando esté en juego dicho número.
+        - En caso de que la pinta de la apuesta se cambiara a ases, se permite rebajar el número de apariciones en curso, a la mitad de la apuesta actual más uno en caso de ser par, 
+        o a la mitad aproximado hacia arriba de ser impar.
+        - Si se está apostando por ases y se quiere cambiar de pinta, solo se permite apostar al doble más uno (o más) respecto del número de ases de la apuesta.
+        - En ronda obligada, no se puede subir la pinta (excepto cuando el jugador que apuesta tenga solo un dado).
+    """
+
+
+
     def validar_apuesta(self, apuesta_actual, apuesta_nueva, cantidad_dados, obligado):
+        """
+        Método principal que se encarga de validar si una respuesta es válida o no
+
+        Args:
+            - apuesta_actual (tuple[int, int] | None): Representa la apuesta anterior y tiene un formato del tipo (apariciones, pinta), en caso que que se esté jugando 
+            a primera apuestade la ronda este valor puede ser None.
+            - apuesta_nueva (tuple[int, int]): Es la nueva apuesta que se desea jugar y de la cual se quiere saber si es válida o no. También es del formato (apariciones, pinta).
+            - cantidad_dados (int): Indica la cantidad de dados que tiene el jugador que está realizando la apuesta nueva.
+            - obligado (bool): Indica si una ronda es obligada. True para cuando es obligada y False para cuando no lo es.
+
+        Returns:
+            bool:
+                True si la apuesta es válida. False si la apuesta es inválida.
+        """
+        
         if apuesta_actual is None:
             apariciones_actual, pinta_actual = None, None
         else:
