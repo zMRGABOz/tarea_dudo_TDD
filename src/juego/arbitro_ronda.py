@@ -14,3 +14,13 @@ class ArbitroRonda:
             return True
         else:
             return False
+
+    def calzar(self, cachos, apuesta_actual, obligado, indice_calzo):
+        contador = 0
+        contador_pintas = ContadorPintas()
+        apuesta_apariciones, pinta_actual = apuesta_actual
+        for cacho in cachos:
+            dados = cacho.get_dados()
+            contador += contador_pintas.contar_pinta(dados, pinta_actual, obligado)
+        if apuesta_apariciones == contador:
+            return True
