@@ -27,6 +27,7 @@ class ArbitroRonda:
             dados = cacho.get_dados()
             contador += contador_pintas.contar_pinta(dados, pinta_actual, obligado)
         if apuesta_apariciones == contador:
+            cachos[indice_calzo].añadir_dado()
             return True
         else:
             return False

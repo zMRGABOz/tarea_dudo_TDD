@@ -16,8 +16,11 @@ class TestCacho:
 
     def test_añadir_dado(self):
         cacho = Cacho()
+        #Se debe quitar un dado porque no puede haber mas de 5 dados en un cacho
+        cacho.quitar_dado()
+        assert len(cacho.get_dados()) == 4
         cacho.añadir_dado()
-        assert len(cacho.get_dados()) == 6
+        assert len(cacho.get_dados()) == 5
 
     def test_quitar_dado(self):
         cacho = Cacho()
