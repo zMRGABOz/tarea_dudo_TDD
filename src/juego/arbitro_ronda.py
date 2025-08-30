@@ -11,6 +11,8 @@ class ArbitroRonda:
             dados = cacho.get_dados()
             contador += contador_pintas.contar_pinta(dados, pinta_actual, obligado)
         if apuesta_apariciones > contador:
+            #Quitar dado a quien efectuo la apuesta
+            cachos[indice_apuesta].quitar_dado()
             return True
         else:
             return False
