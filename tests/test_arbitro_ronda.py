@@ -97,3 +97,24 @@ class TestArbitroRonda:
             assert len(cachos[indice_dudo].get_dados()) == 4
             assert arbitro_ronda.dudar(cachos, (9, 2), obligado, indice_dudo, indice_apuesta) == False
             assert len(cachos[indice_dudo].get_dados()) == 3
+
+        def test_calzar_correcta_gana_dado(self, mocker):
+            mocker.patch("src.servicios.generador_aleatorio.random.randint", return_value=2)
+            cachos = [Cacho() for _ in range(2)]
+            for cacho in cachos:
+                cacho.agitar()
+            # Hay 10 Tontos en total
+            arbitro_ronda = ArbitroRonda()
+            obligado = False
+            indice_calzo = 1
+
+            # Como un cacho puede tener max 5 dados le quitaremos uno para verificar que si se añade el dado
+            cachos[indice_calzo].quitar_dado()
+            assert len(cachos[indice_calzo].get_dados()) == 4
+            assert arbitro_ronda.calzar(cachos, (9, 2), obligado, indice_calzo) == True
+            assert len(cachos[indice_calzo].get_dados()) == 5
+            cachos[indice_calzo].agitar()
+            # Comprobar que si hay 5 dados se reserva 1
+            assert len(cachos[indice_calzo].get_dados()) == 5
+            assert arbitro_ronda.calzar(cachos, (10, 2), obligado, indice_calzo) == True
+            assert cachos[indice_calzo].reserva == 1
