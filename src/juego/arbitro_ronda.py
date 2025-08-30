@@ -4,7 +4,7 @@ from src.juego.contador_pintas import ContadorPintas
 
 class ArbitroRonda:
     def dudar(self, cachos, apuesta_actual, obligado, indice_dudo, indice_apuesta):
-        contador_apariciones= 0 # cantidad de apariciones real de la pinta
+        contador_apariciones = 0
         contador_pintas = ContadorPintas()
         # apuesta_apariciones contiene el numero especulado que hizo de la cantidad de dados de la pinta: pinta_actual
         apuesta_apariciones, pinta_actual = apuesta_actual
@@ -21,12 +21,13 @@ class ArbitroRonda:
             return False
 
     def calzar(self, cachos, apuesta_actual, obligado, indice_calzo):
-        contador_apariciones = 0
         contador_pintas = ContadorPintas()
         apuesta_apariciones, pinta_actual = apuesta_actual
-        for cacho in cachos:
-            dados = cacho.get_dados()
-            contador_apariciones += contador_pintas.contar_pinta(dados, pinta_actual, obligado)
+        # cantidad de apariciones real de la pinta
+        contador_apariciones = sum(
+            contador_pintas.contar_pinta(cacho.get_dados(), pinta_actual, obligado)
+            for cacho in cachos
+        )
         if apuesta_apariciones == contador_apariciones:
             cachos[indice_calzo].añadir_dado()
             return True
