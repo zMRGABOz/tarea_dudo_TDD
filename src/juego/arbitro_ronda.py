@@ -31,4 +31,5 @@ class ArbitroRonda:
             cachos[indice_calzo].añadir_dado()
             return True
         else:
+            cachos[indice_calzo].quitar_dado()
             return False
