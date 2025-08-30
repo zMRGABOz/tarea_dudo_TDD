@@ -132,3 +132,22 @@ class TestArbitroRonda:
             assert len(cachos[indice_calzo].get_dados()) == 5
             assert arbitro_ronda.calzar(cachos, (1, 3), obligado, indice_calzo) == False
             assert len(cachos[indice_calzo].get_dados()) == 4
+        
+        def test_validar_cacho_mitad_dados(self):
+            cachos = [Cacho() for _ in range(2)]
+            for cacho in cachos:
+                cacho.agitar()
+            # Hay 10 Tontos en total
+            arbitro_ronda = ArbitroRonda()
+            indice_calzo = 1
+            indice_apuesta = 0
+            #Quitar 4 dados del tablero
+            for _ in range (2):
+                cachos[indice_calzo].quitar_dado()
+                cachos[indice_apuesta].quitar_dado()
+            #Quitar un dado mas para que sean 5 (la mitad de los que habian originalmente)
+            cachos[indice_calzo].quitar_dado()
+            assert arbitro_ronda.validar_calzar(cachos, indice_calzo) == True
+            #Quitar un dado más, 4 dados en el tablero, no se puede calzar
+            cachos[indice_apuesta].quitar_dado()
+            assert arbitro_ronda.validar_calzar(cachos, indice_calzo) == False
