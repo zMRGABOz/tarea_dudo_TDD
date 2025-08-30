@@ -118,3 +118,17 @@ class TestArbitroRonda:
             assert len(cachos[indice_calzo].get_dados()) == 5
             assert arbitro_ronda.calzar(cachos, (10, 2), obligado, indice_calzo) == True
             assert cachos[indice_calzo].reserva == 1
+
+        def test_calzar_incorrecta_pierde_dado(self, mocker):
+            mocker.patch("src.servicios.generador_aleatorio.random.randint", return_value=2)
+            cachos = [Cacho() for _ in range(2)]
+            for cacho in cachos:
+                cacho.agitar()
+            # Hay 10 Tontos en total
+            arbitro_ronda = ArbitroRonda()
+            obligado = False
+            indice_calzo = 1
+
+            assert len(cachos[indice_calzo].get_dados()) == 5
+            assert arbitro_ronda.calzar(cachos, (1, 3), obligado, indice_calzo) == False
+            assert len(cachos[indice_calzo].get_dados()) == 4
