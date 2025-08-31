@@ -53,3 +53,12 @@ def test_ronda_obligado():
     assert validador.validar_apuesta((3, 2), (3,6), 4, True) == False
     assert validador.validar_apuesta((2, 2), (3, 2), 4, True) == True
     assert validador.validar_apuesta((3, 2), (4, 4), 1, True) == True
+
+def test_rango_de_pinta():
+    validador = ValidadorApuesta()
+    assert validador.validar_apuesta((4, 4), (5, 6), 5, False) == True
+    assert validador.validar_apuesta((4, 4), (5, 0), 5, False) == False
+    assert validador.validar_apuesta((4, 4), (5, 7), 5, False) == False
+    assert validador.validar_apuesta((4, 4), (5, 4.5), 5, False) == False
+    assert validador.validar_apuesta((4, 4), (5, -7), 5, False) == False
+    assert validador.validar_apuesta((4, 4), (5, -10.5), 5, False) == False
