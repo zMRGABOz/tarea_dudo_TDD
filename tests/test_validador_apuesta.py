@@ -62,3 +62,10 @@ def test_rango_de_pinta():
     assert validador.validar_apuesta((4, 4), (5, 4.5), 5, False) == False
     assert validador.validar_apuesta((4, 4), (5, -7), 5, False) == False
     assert validador.validar_apuesta((4, 4), (5, -10.5), 5, False) == False
+
+def test_rango_de_apariciones():
+    validador = ValidadorApuesta()
+    assert validador.validar_apuesta((4, 4), (5, 6), 5, False) == True
+    assert validador.validar_apuesta((4, 4), (0, 6), 5, False) == False
+    assert validador.validar_apuesta((4, 4), (-6, 6), 5, False) == False
+    assert validador.validar_apuesta((4, 4), (4.6, 6), 5, False) == False
