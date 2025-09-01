@@ -2,6 +2,9 @@ from src.juego.cacho import Cacho
 from src.juego.arbitro_ronda import ArbitroRonda
 from src.juego.validador_apuesta import ValidadorApuesta
 from src.juego.dado import Dado
+import time
+import sys
+import os
 
 
 class GestorPartida:
@@ -125,23 +128,53 @@ class GestorPartida:
             return True
         return False
 
+def limpiar():
+    os.system("cls" if os.name == "nt" else "clear") # con esto limpiamos la consola del sistema luego de las animaciones
+
+def animar_texto(texto, delay=0.05):
+    """
+    Imprime texto carácter por carácter simulando animación.
+    """
+    for char in texto:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
+
+def animar_dados():
+    """
+    Animación de dados girando en consola.
+    """
+    cuadros = ["[ ⚀ ]", "[ ⚁ ]", "[ ⚂ ]", "[ ⚃ ]", "[ ⚄ ]", "[ ⚅ ]"]
+    for _ in range(8):
+        for cuadro in cuadros:
+            sys.stdout.write(f"\rLanzando dados... {cuadro}")
+            sys.stdout.flush()
+            time.sleep(0.1)
+    print("\r", end="")
+
+# ==== Juego principal ==== aqui utilizamos todas las funciones de gestor_partida
 def main():
-    print("===Bienvenido al juego del Dudo===")
+    limpiar()
+    animar_texto("=== Bienvenido al juego del Dudo ===", 0.03)
 
     # Ingreso de jugadores
     n = int(input("¿Cuántos jugadores participarán? (mínimo 2): "))
     nombres = []
     for i in range(n):
-        nombre = input(f"Nombre del jugador {i+1}: ")
+        nombre = input(f"Nombre del jugador {i + 1}: ")
         nombres.append(nombre)
 
     partida = GestorPartida(nombres)
 
     # Determinar jugador inicial
+    limpiar()
+    animar_texto("\n Determinando jugador inicial...", 0.04)
+    time.sleep(1)
     inicial = partida.determinar_inicial()
 
     # Sentido del juego
-    sentido = input(f"{inicial}, elige sentido (izquierda/derecha): ")
+    sentido = input(f"\n{inicial}, elige sentido (izquierda/derecha): ")
     partida.definir_sentido(inicial, sentido)
 
     jugador_actual = inicial
@@ -149,10 +182,10 @@ def main():
     # Ciclo principal
     while not partida.verificar_fin():
         partida.iniciar_ronda()
-
         ronda_activa = True
+
         while ronda_activa and not partida.verificar_fin():
-            print(f"\nTurno de {jugador_actual}")
+            print(f"\n Turno de {jugador_actual}")
             print("Opciones: [A]postar, [D]udar, [C]alzar")
             opcion = input("Elige acción: ").strip().upper()
 
@@ -160,30 +193,35 @@ def main():
                 try:
                     apariciones = int(input("Número de apariciones: "))
                     pinta = int(input("Pinta (1=As, 2=Tonto, 3=Tren, 4=Cuadra, 5=Quina, 6=Sexto): "))
+
+                    animar_dados()
                     apuesta = (apariciones, pinta)
                     if partida.procesar_apuesta(jugador_actual, apuesta):
                         jugador_actual = partida.siguiente_jugador(jugador_actual)
+
                 except ValueError:
-                    print("Entrada inválida, intenta de nuevo.")
+                    print(" Entrada inválida, intenta de nuevo.")
 
             elif opcion == "D":
                 anterior = partida.orden_jugadores[
                     (partida.orden_jugadores.index(jugador_actual) - 1) % len(partida.orden_jugadores)
-                ]
+                    ]
+                animar_texto(f"\n {jugador_actual} dice: ¡Lo dudo!", 0.05)
+                time.sleep(1)
                 partida.procesar_duda(jugador_actual, anterior)
                 ronda_activa = False
-                jugador_actual = jugador_actual  # El que pierde dado empieza la próxima ronda en el orden decidido al comienzo
 
             elif opcion == "C":
+                animar_texto(f"\n {jugador_actual} intenta calzar...", 0.05)
+                time.sleep(1)
                 partida.procesar_calzar(jugador_actual)
                 ronda_activa = False
-                jugador_actual = jugador_actual  # El que pierde o recupera dado empieza la próxima ronda
 
             else:
-                print("⚠️ Opción inválida, elige A, D o C.")
+                print(" Opción inválida, elige A, D o C.")
 
-    print("=== Fin del juego ===")
-
+    animar_texto("\n=== Felicidades ===", 0.04)
+    animar_texto("\n=== Fin del juego ===", 0.04)
 
 if __name__ == "__main__":
     main()
