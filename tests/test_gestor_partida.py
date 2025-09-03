@@ -23,3 +23,12 @@ class TestGestorPartida:
         idx = gp.determinar_inicial()
         assert idx in (0, 1)
 
+    def test_apostar_delega_validador(self, mocker):
+        gp = GestorPartida(["A", "B"])
+        gp.validador = mocker.MagicMock()
+        gp.validador.validar_apuesta.return_value = True
+        apuesta = (2, 3)
+        ok = gp.apostar(0, apuesta)
+        assert ok is True
+        gp.validador.validar_apuesta.assert_called_once()
+
