@@ -139,18 +139,19 @@ class TestGestorPartida:
 
 class TestMainIntegration:
     def test_main_flujo_minimo(self, mocker):
-        # Mock inputs: 2 jugadores, nombres, sentido, acción A, apariciones, pinta, acción D
-        mocker.patch.object(builtins, "input", side_effect=[
+        mocker.patch("builtins.input", side_effect=[
             "2", "Ana", "Beto",  # jugadores
             "derecha",  # sentido
-            "A", "2", "3",  # apuesta
-            "D"  # dudar → termina ronda
+            "A", "2", "3",  # apuesta válida
+            "D"  # dudar → termina la ronda
         ])
-        mocker.patch("time.sleep")  # para acelerar
-        mocker.patch("os.system")  # limpiar pantalla
-        mocker.patch("src.juego.gestor_partida.animar_dados")  # quitar animación
-        mocker.patch("src.juego.gestor_partida.animar_texto")  # quitar animación
-        gp = GestorPartida(["Ana", "Beto"])
-        mocker.patch.object(gp, "hay_ganador", side_effect=[False, True])  # terminar pronto
-        # correr main, no debe lanzar error
+        mocker.patch("time.sleep")
+        mocker.patch("os.system")
+        mocker.patch("src.juego.gestor_partida.animar_dados")
+        mocker.patch("src.juego.gestor_partida.animar_texto")
+
+        # 🔑 forzar que después de la primera ronda el juego termine
+        mocker.patch("src.juego.gestor_partida.GestorPartida.hay_ganador", side_effect=[False, True, True])
+        mocker.patch("src.juego.gestor_partida.GestorPartida.ganador", return_value="Ana")
+
         main()
