@@ -14,22 +14,23 @@ pip install -r requirements.txt
 
 ## Ejecutar Tests
 
-### Todos los tests con cobertura:
+### Solo tests (sin cobertura):
 ```bash
 pytest
 ```
+
+### Todos los tests con cobertura:
+```bash
+pytest --cov=src --cov-report=term-missing
+```
+
 
 ### Test específico:
 ```bash
 pytest tests/test_dado.py
 ```
 
-### Test específico con más detalle:
+### Test específico con cobertura:
 ```bash
-pytest tests/test_dado.py -vv -s
-```
-
-### Solo cobertura:
-```bash
-pytest --cov=src --cov-report=term-missing
+pytest tests/test_dado.py --cov=src.juego.dado --cov-report=term-missing
 ```
