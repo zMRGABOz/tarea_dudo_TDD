@@ -210,102 +210,162 @@ class GestorPartida:
     def quien_inicia_proxima(self) -> Optional[int]:
         return self.indice_inicial_proxima
 
-    # ==== ahora corremos en el main todas las funciones ====
-
+# ==== Utilidades de consola ====
 def limpiar():
     os.system("cls" if os.name == "nt" else "clear")
 
-
-def animar_texto(texto, delay=0.05):
-    for char in texto:
-        sys.stdout.write(char)
+def animar_texto(texto: str, delay: float = 0.03):
+    for ch in texto:
+        sys.stdout.write(ch)
         sys.stdout.flush()
         time.sleep(delay)
     print()
 
-
 def animar_dados():
     cuadros = ["[ ⚀ ]", "[ ⚁ ]", "[ ⚂ ]", "[ ⚃ ]", "[ ⚄ ]", "[ ⚅ ]"]
     for _ in range(6):
-        for cuadro in cuadros:
-            sys.stdout.write(f"\rLanzando dados... {cuadro}")
+        for c in cuadros:
+            sys.stdout.write(f"\rLanzando dados... {c}")
             sys.stdout.flush()
-            time.sleep(0.1)
+            time.sleep(0.08)
     print("\r", end="")
 
-
-# ==== Juego principal ====
-
+# ==== Programa principal ====
 def main():
     limpiar()
-    animar_texto("=== Bienvenido al juego del Dudo ===", 0.03)
+    animar_texto("=== Bienvenido al juego del Dudo ===", 0.02)
 
     # Ingreso de jugadores
-    n = int(input("¿Cuántos jugadores participarán? (mínimo 2): "))
+    while True:
+        try:
+            n = int(input("¿Cuántos jugadores participarán? (mínimo 2): "))
+            if n < 2:
+                print("Se requieren al menos 2 jugadores.")
+                continue
+            break
+        except ValueError:
+            print("Número inválido, intenta de nuevo.")
     nombres = []
     for i in range(n):
-        nombre = input(f"Nombre del jugador {i + 1}: ")
+        nombre = input(f"Nombre del jugador {i + 1}: ").strip() or f"jugador{i+1}"
         nombres.append(nombre)
 
     partida = GestorPartida(nombres)
 
     # Determinar jugador inicial
     limpiar()
-    animar_texto("\n Determinando jugador inicial...", 0.04)
-    time.sleep(1)
+    animar_texto("\n Determinando jugador inicial...", 0.03)
+    time.sleep(0.8)
     inicial = partida.determinar_inicial()
+    animar_texto(f"Comienza: {nombres[inicial]}\n", 0.02)
 
-    # Sentido del juego
-    sentido = input(f"\n{nombres[inicial]}, elige sentido (izquierda/derecha): ")
-    partida.definir_sentido(sentido)
+    # Sentido del juego (izquierda/derecha)
+    while True:
+        sentido = input(f"{nombres[inicial]}, elige sentido (izquierda/derecha): ").strip().lower()
+        if sentido in ("izquierda", "derecha"):
+            partida.definir_sentido(sentido)
+            break
+        print("Respuesta inválida. Escribe 'izquierda' o 'derecha'.")
 
     jugador_actual = inicial
 
-    # Ciclo principal
+    # Bucle principal de juego
     while not partida.hay_ganador():
         partida.iniciar_ronda()
-        ronda_activa = True
+        animar_texto("\n--- Nueva ronda ---", 0.01)
+        # Mostrar resumen de dados por jugador (solo conteo)
+        print("Dados en mesa:")
+        for idx, nombre in enumerate(nombres):
+            dados_count = len(partida.cachos[idx].get_dados())
+            print(f"  {nombre}: {dados_count} dado(s)")
+        print()
 
+        ronda_activa = True
         while ronda_activa and not partida.hay_ganador():
-            nombre_jugador = nombres[jugador_actual]
-            print(f"\n Turno de {nombre_jugador}")
+            nombre = nombres[jugador_actual]
+            # Mostrar dados propios del jugador (pues en consola no podemos ocultarlos)
+            dados_propios = partida.cachos[jugador_actual].get_dados()
+            dados_str = ", ".join(str(d) for d in dados_propios)
+            print(f"\nTurno de {nombre}")
+            print(f"Tus dados: {dados_str}")
             print("Opciones: [A]postar, [D]udar, [C]alzar")
             opcion = input("Elige acción: ").strip().upper()
 
             if opcion == "A":
                 try:
-                    apariciones = int(input("Número de apariciones: "))
-                    pinta = int(input("Pinta (1=As, 2=Tonto, 3=Tren, 4=Cuadra, 5=Quina, 6=Sexto): "))
-
-                    animar_dados()
-                    apuesta = (apariciones, pinta)
-                    if partida.apostar(jugador_actual, apuesta):
-                        jugador_actual = partida.siguiente_jugador(jugador_actual)
-                    else:
-                        print(" Apuesta inválida.")
-
+                    apariciones = int(input("Número de apariciones: ").strip())
+                    pinta = int(input("Pinta (1=As, 2=Tonto, 3=Tren, 4=Cuadra, 5=Quina, 6=Sexto): ").strip())
                 except ValueError:
-                    print(" Entrada inválida, intenta de nuevo.")
+                    print("Entrada numérica inválida. Intenta de nuevo.")
+                    continue
+
+                # Animación antes de validar
+                animar_dados()
+
+                apuesta = (apariciones, pinta)
+                valido = partida.apostar(jugador_actual, apuesta)
+                if valido:
+                    print(f" {nombre} apuesta {apariciones} x pinta {pinta}. Turno siguiente.")
+                    # Avanzar al siguiente jugador activo
+                    jugador_actual = partida.siguiente_jugador(jugador_actual)
+                else:
+                    # Mensajes más informativos según caso común
+                    if partida.apuesta_actual is None:
+                        # Es primera apuesta de la ronda
+                        # Regla común: no partir con Ases si tienes más de 1 dado
+                        if pinta == 1 and len(dados_propios) != 1:
+                            print(" Apuesta inválida: no puedes partir con 'Ases' salvo que tengas 1 dado.")
+                        else:
+                            print(" Apuesta inválida: recuerda que debes aumentar la cantidad o subir la pinta.")
+                    else:
+                        print(" Apuesta inválida según las reglas (debe ser mayor en cantidad o en pinta).")
+                    # no avanzamos el turno; el mismo jugador reintenta
 
             elif opcion == "D":
-                animar_texto(f"\n {nombre_jugador} dice: ¡Lo dudo!", 0.05)
-                time.sleep(1)
-                partida.dudar(jugador_actual)
+                # Solo se puede dudar si ya hay una apuesta vigente
+                try:
+                    resultado = partida.dudar(jugador_actual)
+                except RuntimeError:
+                    print("No hay apuesta vigente para dudar.")
+                    continue
+                if resultado:
+                    print(f" Duda correcta. Pierde dados quien apostó. Se termina la ronda.")
+                else:
+                    print(f" Duda incorrecta. Pierde quien dudó. Se termina la ronda.")
                 ronda_activa = False
-                jugador_actual = partida.quien_inicia_proxima()
+                prox = partida.quien_inicia_proxima()
+                if isinstance(prox, int):
+                    jugador_actual = prox
+                else:
+                    # fallback: siguiente jugador en orden
+                    jugador_actual = partida.siguiente_jugador(jugador_actual)
 
             elif opcion == "C":
-                animar_texto(f"\n {nombre_jugador} intenta calzar...", 0.05)
-                time.sleep(1)
-                partida.calzar(jugador_actual)
+                # Intentar calzar (puede devolver None si no está permitido)
+                try:
+                    res = partida.calzar(jugador_actual)
+                except RuntimeError:
+                    print("No hay apuesta vigente para calzar.")
+                    continue
+                if res is None:
+                    print(" No puedes calzar en este momento (no se cumple la condición de mitad de dados o tener 1 dado).")
+                    continue
+                if res:
+                    print("Calce correcto: ganaste un dado (o se te devuelve). Se termina la ronda.")
+                else:
+                    print("Calce incorrecto: perdiste un dado. Se termina la ronda.")
                 ronda_activa = False
-                jugador_actual = partida.quien_inicia_proxima()
+                prox = partida.quien_inicia_proxima()
+                if isinstance(prox, int):
+                    jugador_actual = prox
+                else:
+                    jugador_actual = partida.siguiente_jugador(jugador_actual)
 
             else:
-                print(" Opción inválida, elige A, D o C.")
+                print("Opción inválida. Usa A, D o C.")
 
-    animar_texto(f"\n ¡El ganador es {partida.ganador()}!", 0.04)
-    animar_texto("\n=== Fin del juego ===", 0.04)
+    animar_texto(f"\n🏆 ¡El ganador es {partida.ganador()}!", 0.02)
+    animar_texto("\n=== Fin del juego ===", 0.02)
 
 
 if __name__ == "__main__":
