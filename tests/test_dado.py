@@ -12,3 +12,9 @@ class TestDado:
         valor = 1
         pinta = Dado().denominar_pinta(valor)
         assert pinta == "As"
+    
+    def test_str_dado(self):
+        dado = Dado()
+        assert str(dado) == "No lanzado"
+        dado.lanzar()
+        assert str(dado) == dado.get_pinta()
