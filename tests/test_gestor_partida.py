@@ -16,3 +16,10 @@ class TestGestorPartida:
         assert gp.obligado is True
 
 
+    def test_determinar_inicial_devuelve_indice_valido(self, mocker):
+        # necesito parchear el generador de aleatorio
+        mocker.patch("src.servicios.generador_aleatorio.random.randint", side_effect=[6, 3])
+        gp = GestorPartida(["A", "B"])
+        idx = gp.determinar_inicial()
+        assert idx in (0, 1)
+
