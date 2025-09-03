@@ -32,3 +32,22 @@ class TestGestorPartida:
         assert ok is True
         gp.validador.validar_apuesta.assert_called_once()
 
+    def test_dudar_y_calzar_definen_indice_inicial_proxima(self, mocker):
+        gp = GestorPartida(["A", "B"])
+        gp.arbitro = mocker.MagicMock()
+
+        # --- Dudar ---
+        gp.apuesta_actual = (1, 2)
+        gp.indice_ultimo_apostador = 1
+        gp.arbitro.dudar.return_value = True  # duda correcta → pierde apostador
+        res = gp.dudar(0)
+        assert res is True
+        assert gp.indice_inicial_proxima == gp.indice_ultimo_apostador
+
+        # --- Calzar ---
+        gp.apuesta_actual = (1, 2)
+        gp.arbitro.validar_calzar.return_value = True
+        gp.arbitro.calzar.return_value = False  # falló el calzar
+        res2 = gp.calzar(1)
+        assert res2 is False
+        assert gp.indice_inicial_proxima == 1
